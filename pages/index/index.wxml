@@ -1,0 +1,10 @@
+<view class="share">
+    <canvas canvas-id="canvas1" class="share__canvas"></canvas>
+    <canvas canvas-id="canvas2" class="share__canvas"></canvas>
+    <canvas canvas-id="canvas4" class="share__canvas"></canvas>
+    <canvas canvas-id="canvas3" class="share__canvas"></canvas>
+    <canvas canvas-id="canvas5" class="share__canvas"></canvas>
+    <canvas canvas-id="canvas6" class="share__canvas"></canvas>
+    <canvas canvas-id="canvas7" class="share__canvas"></canvas>
+    <canvas canvas-id="canvas8" class="share__canvas share__canvas-long"></canvas>
+</view>

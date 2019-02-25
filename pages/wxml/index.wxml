@@ -1,0 +1,62 @@
+<view class="share">
+
+    <view class="share__title">Wxml:</view>
+    <view class="share__canvas share__canvas1">
+        <view class="share__canvas1-text draw_canvas" data-type="text" data-text="这是一段无边距文字">这是一段无边距文字</view>
+        <view class="share__canvas1-text-2 draw_canvas" data-type="text" data-text="这是一段margin文字">这是一段margin文字</view>
+        <view class="share__canvas1-text-3 draw_canvas" data-type="text" data-text="这是一段padding文字">这是一段padding文字</view>
+        <view class="share__canvas1-text-4 draw_canvas" data-type="text" data-text="这是一段居中有背景文字">这是一段居中有背景文字</view>
+        <view class="share__canvas1-text-5 draw_canvas" data-type="text" data-text="这是一段背景文字" data-background="rgba(255, 0, 0, 0.4)" data-padding="0 0 0 0">这是一段背景文字</view>
+    </view>
+    <view class="share__title">Canvas:</view>
+    <canvas canvas-id="canvas1" class="share__canvas"></canvas>
+    <view class="share__title">Wxml:</view>
+    <view class="share__canvas share__canvas2">
+        <image class="share__canvas2-image draw_canvas" data-type="image" data-url="https://mmocgame.qpic.cn/wechatgame/duc2TvpEgSQCEa0WicosqlEgJiacYLaTLEDFB8Kq9Hr7LjAVhM8wu8TT77KqNezQnH/0" src="https://mmocgame.qpic.cn/wechatgame/duc2TvpEgSQCEa0WicosqlEgJiacYLaTLEDFB8Kq9Hr7LjAVhM8wu8TT77KqNezQnH/0"></image>
+        <image class="share__canvas2-image-2 draw_canvas" data-type="radius-image" data-url="./img/demo.png" src="./img/demo.png"></image>
+        <view class="share__canvas2-image-3 draw_canvas" style="background-image: url(https://mmocgame.qpic.cn/wechatgame/duc2TvpEgSQCEa0WicosqlEgJiacYLaTLEDFB8Kq9Hr7LjAVhM8wu8TT77KqNezQnH/0);" data-type="background-image"></view>
+    </view>
+    <view class="share__title">Canvas: </view>
+    <canvas canvas-id="canvas2" class="share__canvas"></canvas>
+
+    <view class="share__title">Wxml:</view>
+    <view class="share__canvas share__canvas3">
+        <view class="share__canvas3-inline draw_canvas" data-type="inline-text" data-text="这是一段行内文字">这是一段行内文字</view>
+        <view class="share__canvas3-inline share__canvas3-inline_bold draw_canvas" data-type="inline-text" data-text="这是一段加粗行内文字试试">这是一段加粗行内文字试试</view>
+        <view class="share__canvas3-inline draw_canvas" style="color: red" data-type="inline-text" data-text="这是一段换行文字">这是一段换行文字</view>
+        <view class="share__canvas3-inline draw_canvas" data-type="inline-text" data-text="这是一段很长很长很长很长很长很长很长很长很长很长很长很长的换行文字">这是一段很长很长很长很长很长很长很长很长很长很长很长很长的换行文字</view>
+        <view class="share__canvas3-inline draw_canvas" data-type="inline-text" data-text="这是一段换行文字">这是一段换行文字</view>
+        <view class="share__canvas3-inline draw_canvas" style="color: blue" data-type="inline-text" data-text="这是一段换了行的结束文字">这是一段换了行的结束文字</view>
+        <image src="./img/emoji.png" class="share__canvas-emoji draw_canvas" data-type="inline-image" data-url="./img/emoji.png"></image>
+        <image src="./img/emoji.png" class="share__canvas-emoji draw_canvas" data-type="inline-image" data-url="./img/emoji.png"></image>
+        <image src="./img/emoji.png" class="share__canvas-emoji draw_canvas" data-type="inline-image" data-url="./img/emoji.png"></image>
+        <view class="share__canvas3-inline draw_canvas" data-type="inline-text" data-text="这是一段行内文字这是一段行内文字">这是一段行内文字这是一段行内文字</view>
+    </view>
+    <view class="share__title">Canvas: </view>
+    <canvas canvas-id="canvas3" class="share__canvas"></canvas>
+
+    <view class="share__title">Wxml:</view>
+    <view class="share__canvas share__canvas5">
+        <image class="share__canvas5-image draw_canvas" data-type="image" data-url="./img/demo.png" src="./img/demo.png"></image>
+        <view class="share__canvas5-text draw_canvas" data-type="text" data-text="这是一段无边距文字">这是一段无边距文字</view>
+        <view class="share__canvas5-text-2 draw_canvas" data-type="text" data-text="这是一段margin文字">这是一段margin文字</view>
+    </view>
+    <view class="share__title">Canvas:</view>
+    <canvas canvas-id="canvas5" class="share__canvas"></canvas>
+
+    <view class="share__title">Wxml:</view>
+    <view class="share__canvas share__canvas4">
+        <view class="share__canvas4-block draw_canvas" data-type="text" data-text="Wxml2Cavnas库，是一个生成小程序分享图的通用方案，提供了两种绘制方式：">Wxml2Cavnas库，是一个生成小程序分享图的通用方案，提供了两种绘制方式：</view>
+        <view class="share__canvas4-block draw_canvas" data-type="text" data-text="封装基础图形的绘制接口，包括矩形、圆形、线条、图片、圆角图片、纯文本等，使用时只需要声明元素类型并提供关键数据即可，不需要再关注canvas的具体绘制过程；">封装基础图形的绘制接口，包括矩形、圆形、线条、图片、圆角图片、纯文本等，使用时只需要声明元素类型并提供关键数据即可，不需要再关注canvas的具体绘制过程；</view>
+        <image src="./img/demo.png" class="share__canvas4-image draw_canvas" data-type="image" data-url="./img/demo.png"></image>
+        <view class="share__canvas4-block draw_canvas" data-type="text" data-text="wxml直接转换成canvas元素，使用时传入待绘制的wxml节点的class类名，并且声明绘制此节点的类型（图片、文字等），会自动读取此节点的computedStyle，利用这些数据完成元素的绘制。">wxml直接转换成canvas元素，使用时传入待绘制的wxml节点的class类名，并且声明绘制此节点的类型（图片、文字等），会自动读取此节点的computedStyle，利用这些数据完成元素的绘制。</view>
+    </view>
+    <view class="share__title">Canvas: </view>
+    <canvas canvas-id="canvas4" class="share__canvas share__canvas4"></canvas>
+    
+    <view class="share__title">Result:</view>
+    <block wx:for="{{ imgs }}" wx:for-item="img" wx:key="img" wx:for-index="idx">
+        <image src="{{ img }}" class="share__result-img {{ idx === 3 ? 'share__result-img-4' : ''}}"></image>
+        <button data-index="{{ idx }}" catchtap="saveImage" class="share__button">保存图片</button>
+    </block>
+</view>

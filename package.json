@@ -1,0 +1,16 @@
+{
+  "name": "wxml2canvas",
+  "version": "1.0.0",
+  "description": "将wxml指定节点转换成canvas元素",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "wxml2canvas",
+    "wxml",
+    "canvas"
+  ],
+  "author": "wg",
+  "license": "ISC"
+}

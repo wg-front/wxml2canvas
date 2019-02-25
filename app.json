@@ -1,0 +1,27 @@
+{
+    "pages":[
+        "pages/wxml/index",
+        "pages/index/index"
+    ],
+    "window":{
+        "backgroundTextStyle":"light",
+        "navigationBarBackgroundColor": "#fff",
+        "navigationBarTitleText": "Wxml2Canvas",
+        "navigationBarTextStyle":"black"
+    },
+
+    "tabBar": {
+        "color": "#444444",
+        "selectedColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "borderStyle": "black",
+        "position": "top",
+        "list": [{
+            "text": "wxml转canvas",
+            "pagePath": "pages/wxml/index"
+        }, {
+            "text": "配置生成",
+            "pagePath": "pages/index/index"
+        }]
+    }
+}

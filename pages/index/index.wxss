@@ -1,0 +1,18 @@
+.share{
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.share__canvas {
+    width: 680rpx;
+    height: 420rpx;
+    background: #f0f0f0;
+    margin-bottom: 60rpx;
+}
+
+.share__canvas-long {
+    height: 800rpx;
+}
