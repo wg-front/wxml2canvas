@@ -7,6 +7,9 @@
 ## 示例
 直接在小程序开发工具里运行项目，可看到两种使用方式。
 
+## 原理介绍
+
+https://developers.weixin.qq.com/community/develop/article/doc/000040894e4360456ff7654be56013
 
 ## 使用方式
 
