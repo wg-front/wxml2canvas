@@ -87,7 +87,6 @@ Page({
 | zoom | Number | 1 | 否 | 画布整体缩放比例，不建议传值，会覆盖各种机型的适配 |
 | translateX | Number | 0 | 否 | 画布整体横向位移 |
 | translateY | Number | 0 | 否 | 画布整体纵向位移 |
-| height | Number | height * 2 | 否 | 输出的图片的高度 |
 | background | String | #ffffff | 否 | 画布的整体背景色 |
 | gradientBackground | Object | null | 否 | 画布整体的渐变背景色 |
 | finish | Function | null | 否 | 绘制成功后回调函数, 返回值url，绘制图片的本地路径 |
