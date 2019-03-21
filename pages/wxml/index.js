@@ -23,6 +23,10 @@ Page({
         setTimeout(() => {
             this.drawImage5();
         }, 1200)
+
+        setTimeout(() => {
+            this.drawImage6();
+        }, 1500)
     },
 
     saveImage (evt) {
@@ -217,5 +221,40 @@ Page({
         }
 
         this.drawImage5.draw(data);
+    },
+
+    drawImage6 () {
+        let self = this;
+        this.drawImage6 = new Wxml2Canvas({
+            width: 340,
+            height: 450,
+            element: 'canvas6',
+            background: '#f0f0f0',
+            progress (percent) {
+                // console.log(percent)
+            },
+            finish(url) {
+                let imgs = self.data.imgs;
+                imgs.push(url);
+
+                self.setData({
+                    imgs
+                })
+            },
+            error (res) {
+            }
+        });
+
+        let data = {
+            list: [{
+                type: 'wxml',
+                class: '.share__canvas6 .draw_canvas',
+                limit: '.share__canvas6',
+                x: 0,
+                y: 0
+            }]
+        }
+
+        this.drawImage6.draw(data);
     }
 });

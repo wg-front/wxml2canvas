@@ -1,5 +1,4 @@
 <view class="share">
-
     <view class="share__title">Wxml:</view>
     <view class="share__canvas share__canvas1">
         <view class="share__canvas1-text draw_canvas" data-type="text" data-text="这是一段无边距文字">这是一段无边距文字</view>
@@ -54,9 +53,28 @@
     <view class="share__title">Canvas: </view>
     <canvas canvas-id="canvas4" class="share__canvas share__canvas4"></canvas>
     
+    <view class="share__title">Wxml:</view>
+    <view class="share__canvas share__canvas6">
+        <image class="share__canvas6-image draw_canvas" data-type="image" data-url="./img/demo.png" src="./img/demo.png" mode="top left" data-mode="top left"></image>
+        <image class="share__canvas6-image draw_canvas" data-type="image" data-url="./img/demo.png" src="./img/demo.png" mode="top" data-mode="top"></image>
+        <image class="share__canvas6-image draw_canvas" data-type="image" data-url="./img/demo.png" src="./img/demo.png" mode="top right" data-mode="top right"></image>
+        <image class="share__canvas6-image draw_canvas" data-type="image" data-url="./img/demo.png" src="./img/demo.png" mode="left" data-mode="left"></image>
+        <image class="share__canvas6-image draw_canvas" data-type="image" data-url="./img/demo.png" src="./img/demo.png" mode="center" data-mode="center"></image>
+        <image class="share__canvas6-image draw_canvas" data-type="image" data-url="./img/demo.png" src="./img/demo.png" mode="right" data-mode="right"></image>
+        <image class="share__canvas6-image draw_canvas" data-type="image" data-url="./img/demo.png" src="./img/demo.png" mode="bottom left" data-mode="bottom left"></image>
+        <image class="share__canvas6-image draw_canvas" data-type="image" data-url="./img/demo.png" src="./img/demo.png" mode="bottom" data-mode="bottom"></image>
+        <image class="share__canvas6-image draw_canvas" data-type="image" data-url="./img/demo.png" src="./img/demo.png" mode="bottom right" data-mode="bottom right"></image>
+        <image class="share__canvas6-image-2 draw_canvas" data-type="image" data-url="./img/demo.png" src="./img/demo.png" mode="scaleToFill" data-mode="scaleToFill"></image>
+        <image class="share__canvas6-image-2 draw_canvas" data-type="image" data-url="./img/demo.png" src="./img/demo.png" mode="aspectFit" data-mode="aspectFit"></image>
+        <image class="share__canvas6-image-2 draw_canvas" data-type="image" data-url="./img/demo.png" src="./img/demo.png" mode="aspectFill" data-mode="aspectFill"></image>
+        <image class="share__canvas6-image-2 draw_canvas" data-type="image" data-url="./img/demo.png" src="./img/demo.png" mode="widthFix" data-mode="widthFix"></image>
+    </view>
+    <view class="share__title">Canvas: </view>
+    <canvas canvas-id="canvas6" class="share__canvas share__canvas6"></canvas>
+
     <view class="share__title">Result:</view>
     <block wx:for="{{ imgs }}" wx:for-item="img" wx:key="img" wx:for-index="idx">
-        <image src="{{ img }}" class="share__result-img {{ idx === 3 ? 'share__result-img-4' : ''}}"></image>
+        <image src="{{ img }}" class="share__result-img {{ idx === 3 || idx === 5 ? 'share__result-img-4' : ''}}" mode="widthFix"></image>
         <button data-index="{{ idx }}" catchtap="saveImage" class="share__button">保存图片</button>
     </block>
 </view>

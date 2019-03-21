@@ -1,5 +1,7 @@
 import Util from './util';
 
+const imageMode = ['scaleToFill', 'aspectFit', 'aspectFill', 'widthFix', 'top', 'bottom', 'center', 'left', 'right', 'top left', 'top right', 'bottom left', 'bottom right']
+
 class Wxml2Canvas {
     constructor (options = {}) {
         this.device = wx.getSystemInfoSync && wx.getSystemInfoSync() || {};
@@ -187,34 +189,55 @@ class Wxml2Canvas {
         list.forEach((item, i) => {
             if (item.url && self._findPicIndex(item.url) === -1) {
                 // 避免重复下载同一图片
-            self.allPic.push({
-                url: item.url,
-                local: ''
-            });
-            all[count++] = new Promise((resolve, reject) => {
-                // 非http(s)域名的就不下载了
-                if (!/^http/.test(item.url) || /^http:\/\/tmp\//.test(item.url) || /^http:\/\/127\.0\.0\.1/.test(item.url)) {
-                    let index = self._findPicIndex(item.url);
-                    if(index > -1) {
-                        self.allPic[index].local = item.url;
-                    }
-                    resolve({ tempFilePath: item.url });
-                } else {
-                    wx.downloadFile({
-                        url: item.url.replace(/^https?/, 'https'),
-                        success: function (res) {
-                            let index = self._findPicIndex(item.url);
-                            if (index > -1) {
-                                self.allPic[index].local = res.tempFilePath;
+                self.allPic.push({
+                    url: item.url,
+                    local: ''
+                });
+                all[count++] = new Promise((resolve, reject) => {
+                    // 非http(s)域名的就不下载了
+                    if (!/^http/.test(item.url) || /^http:\/\/tmp\//.test(item.url) || /^http:\/\/127\.0\.0\.1/.test(item.url)) {
+                        wx.getImageInfo({
+                            src: item.url,
+                            success (res) {
+                                let index = self._findPicIndex(item.url);
+                                if(index > -1) {
+                                    self.allPic[index].local = item.url;
+                                    self.allPic[index].width = res.width;
+                                    self.allPic[index].height = res.height;
+                                }
+                                resolve({ tempFilePath: item.url });
+                            }, 
+                            fail () {
+                                reject();
                             }
-                            resolve(res);
-                        },
-                        fail: (res) => {
-                            reject({errcode: 1001, errmsg: 'download pic error'});
-                        }
-                    })
-                }
-            }) 
+                        })
+                        
+                    } else {
+                        wx.downloadFile({
+                            url: item.url.replace(/^https?/, 'https'),
+                            success: function (res) {
+                                wx.getImageInfo({
+                                    src: res.tempFilePath,
+                                    success (img) {
+                                        let index = self._findPicIndex(item.url);
+                                        if (index > -1) {
+                                            self.allPic[index].local = res.tempFilePath;
+                                            self.allPic[index].width = img.width;
+                                            self.allPic[index].height = img.height;
+                                        }
+                                        resolve(res);
+                                    },
+                                    fail () {
+                                        reject();
+                                    }
+                                })
+                            },
+                            fail: (res) => {
+                                reject({errcode: 1001, errmsg: 'download pic error'});
+                            }
+                        })
+                    }
+                }) 
             }
         });
 
@@ -236,6 +259,10 @@ class Wxml2Canvas {
         let topOffset = 0;
         let width = style.width;
         let height = style.height;
+        let imgWidth = style.width;
+        let imgHeight = style.height;
+        let mode = null;
+
         try {
             item.x = this._resetPositionX(item, style);
             item.y = this._resetPositionY(item, style);
@@ -243,9 +270,15 @@ class Wxml2Canvas {
             let url;
             if(isImage) {
                 let index = this._findPicIndex(item.url);
-                url = index > -1 ? this.allPic[index].local : item.url;
+                if(index > -1) {
+                    url = this.allPic[index].local
+                    imgWidth = this.allPic[index].width
+                    imgHeight = this.allPic[index].height
+                }else {
+                    url = item.url;
+                }
             }
-            
+
             style.padding = style.padding || [];
             if(isWxml === 'inline-wxml') {
                 item.x = item.x + (style.padding[3] && style.padding[3] || 0)
@@ -258,7 +291,16 @@ class Wxml2Canvas {
                 width = width * zoom;
                 height = height * zoom;
             }
-            this._drawRectToCanvas(item.x, item.y, width, height, style, url);
+
+            if(style.dataset && style.dataset.mode && imageMode.indexOf(style.dataset.mode) > -1) {
+                mode = {
+                    type: style.dataset.mode,
+                    width: imgWidth,
+                    height: imgHeight
+                };
+            }
+
+            this._drawRectToCanvas(item.x, item.y, width, height, style, url, mode);
             this._updateProgress(item.progress);
 
             if(resolve) {
@@ -274,9 +316,8 @@ class Wxml2Canvas {
         }
     }
 
-    _drawRectToCanvas(x, y, width, height, style, url) {
+    _drawRectToCanvas (x, y, width, height, style, url, mode) {
         let { fill, border, boxShadow } = style;
-
         this.ctx.save();
         this._drawBoxShadow(boxShadow, (res) => {
             // 真机上填充渐变色时，没有阴影，先画个相等大小的纯色矩形来实现阴影
@@ -285,10 +326,14 @@ class Wxml2Canvas {
                 this.ctx.fillRect(x, y, width, height);
             }
         });
-
-
+        
         if(url) {
-            this.ctx.drawImage(url, x, y, width, height)
+            // 开发者工具有bug，先不裁剪
+            if(mode) {
+                this._resetImageByMode(url, x, y, width, height, mode);
+            }else {
+                this.ctx.drawImage(url, x, y, width, height)
+            }
         }else {
             this._setFill(fill, () => {
                 this.ctx.fillRect(x, y, width, height);
@@ -302,6 +347,109 @@ class Wxml2Canvas {
 
         this.ctx.draw(true);
         this.ctx.restore();
+    }
+
+    _resetImageByMode (url, x, y, width, height, mode) {
+        let self = this;
+        let offsetX = 0;
+        let offsetY = 0;
+        let imgWidth = mode.width;
+        let imgHeight = mode.height;
+
+        switch (mode.type) {
+            case 'scaleToFill': 
+                imgWidth = width;
+                imgHeight = height;
+                self.ctx.drawImage(url, x, y, width, height)
+                break;
+            case 'widthFix': 
+                height = width / ((imgWidth || 1) / (imgHeight || 1))
+                self.ctx.drawImage(url, x, y, width, height)
+                break; 
+            case 'aspectFit': 
+                if(imgWidth > imgHeight) {
+                    let realHeight = width / ((imgWidth || 1) / (imgHeight || 1))
+                    offsetY = -(height - realHeight) / 2
+                    imgWidth = width;
+                    imgHeight = realHeight;
+                }else {
+                    let realWidth = height / ((imgHeight || 1) / (imgWidth || 1))
+                    offsetX = -(width - realWidth) / 2
+                    imgWidth = realWidth;
+                    imgHeight = height;
+                }
+
+                _clip();
+                break;
+            case 'aspectFill': 
+                if(imgWidth > imgHeight) {
+                    let realWidth = imgWidth / ((imgHeight || 1) / (height || 1))
+                    offsetX = (realWidth - width) / 2
+                    imgWidth = realWidth;
+                    imgHeight = height;
+                }else {
+                    let realHeight = imgHeight / ((imgWidth || 1) / (width || 1))
+                    offsetY = (realHeight - height) / 2
+                    imgWidth = width;
+                    imgHeight = realHeight;
+                }
+
+                _clip();
+                break;
+            case 'top left': 
+                _clip();
+                break;
+            case 'top': 
+                offsetX = (mode.width - width) / 2;
+                _clip();
+                break;
+            case 'top right': 
+                offsetX = (mode.width - width);
+                _clip();
+                break;
+            case 'left': 
+                offsetY = (mode.height - height) / 2;
+                _clip();
+                break;
+            case 'center': 
+                offsetX = (mode.width - width) / 2;
+                offsetY = (mode.height - height) / 2;
+                _clip();
+                break;
+            case 'right': 
+                offsetX = (mode.width - width);
+                offsetY = (mode.height - height) / 2;
+                _clip();
+                break;
+            case 'bottom left': 
+                offsetY = (mode.height - height)
+                _clip();
+                break;
+            case 'bottom': 
+                offsetX = (mode.width - width) / 2;
+                offsetY = (mode.height - height)
+                _clip();
+                break;
+            case 'bottom right': 
+                offsetX = (mode.width - width);
+                offsetY = (mode.height - height)
+                _clip();
+                break;
+            default: 
+                imgWidth = width;
+                imgHeight = height;
+                break;  
+        }
+
+        function _clip () {
+            self.ctx.save();
+            self.ctx.beginPath()
+            self.ctx.rect(x, y, width, height)
+            self.ctx.clip();
+            self.ctx.drawImage(url, x - offsetX, y - offsetY, imgWidth, imgHeight)
+            self.ctx.closePath();
+            self.ctx.restore();
+        }
     }
 
     _drawText (item, style, resolve, reject, type, isWxml) {
@@ -751,9 +899,9 @@ class Wxml2Canvas {
                         leftOffset = drawRes.leftOffset;
                         topOffset = drawRes.topOffset;
                     } else if (type === 'inline-image') {
-                        let drawRes = self._drawWxmlImage(sub);
-                        leftOffset = drawRes.leftOffset;
-                        topOffset = drawRes.topOffset;
+                        let drawRes = self._drawWxmlImage(sub) || {};
+                        leftOffset = drawRes.leftOffset || 0;
+                        topOffset = drawRes.topOffset || 0;
                     }
                 });
             });
@@ -821,6 +969,7 @@ class Wxml2Canvas {
     }
 
     _drawWxmlImage (sub, resolve, reject) {
+        
         let imageData = {
             url: sub.dataset.url,
             x: sub.left,
@@ -1167,7 +1316,6 @@ class Wxml2Canvas {
                 grd.addColorStop(1, color[1]);
                 this.ctx.setFillStyle(grd);
             }
-
             callback && callback();
         }
     }

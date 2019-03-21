@@ -1,3 +1,11 @@
+## v1.1.0
+
+支持图片的缩放和裁剪，使用时声明如：`data-mode="aspectFill"`，mode的13种模式完全支持。效果如下：
+
+![图片裁剪和缩放](https://mmocgame.qpic.cn/wechatgame/duc2TvpEgSQCtBianicxcWObMNDWVImPRKIAHSGu9TwQkCslPUZXMmyuwibdzcKtsUl/0)
+
+注意：目前开发者工具图片裁剪显示有bug，以真机效果为准。
+
 # Wml2Canvas 介绍
 
 ## 特性
@@ -5,11 +13,8 @@
 > * wxml元素转换成canvas元素
 
 ## 示例
-直接在小程序开发工具里运行项目，可看到两种使用方式。
+直接在小程序开发工具里运行项目，可看到两种使用方式。真机预览时，建议填入有权限的appid，然后打开调试，否则无法看到网络图片。
 
-## 原理介绍
-
-https://developers.weixin.qq.com/community/develop/article/doc/000040894e4360456ff7654be56013
 
 ## 使用方式
 
@@ -82,11 +87,12 @@ Page({
 | element | String | '' | 是 | 画布的id |
 | width | Number | 0 | 是 | 画布的宽，以iphone6的375为基准，其他机型按比例自动设置实际宽度 |
 | height | Number | 0 | 是 | 画布的高，同上 |
-| destWidth | Number | width * 2 | 否 | 输出的图片的宽度 |
-| destHeight | Number | height * 2 | 否 | 输出的图片的高度 |
+| width | Number | width * 2 | 否 | 输出的图片的宽度 |
+| height | Number | height * 2 | 否 | 输出的图片的高度 |
 | zoom | Number | 1 | 否 | 画布整体缩放比例，不建议传值，会覆盖各种机型的适配 |
 | translateX | Number | 0 | 否 | 画布整体横向位移 |
 | translateY | Number | 0 | 否 | 画布整体纵向位移 |
+| height | Number | height * 2 | 否 | 输出的图片的高度 |
 | background | String | #ffffff | 否 | 画布的整体背景色 |
 | gradientBackground | Object | null | 否 | 画布整体的渐变背景色 |
 | finish | Function | null | 否 | 绘制成功后回调函数, 返回值url，绘制图片的本地路径 |
@@ -303,11 +309,10 @@ let data = {
 
 行内文本与图片有特殊处理逻辑，当top值相同时，按照从左到右顺序排列，可能会与展现有差异。
 
-此外，上述所有的元素都可以增加 __data-delay:Number__ 属性，来实现延迟绘制, number范围：1-100，间接实现层级控制。
+此外，上述所有的元素都可以增加 __delay:Number__ 属性，来实现延迟绘制, number范围：1-100，间接实现层级控制。
 
 
 ## Todo
 
-> * 支持图片裁剪
 > * 支持更多文本样式
 > * 支持任意角度圆角

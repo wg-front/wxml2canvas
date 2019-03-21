@@ -155,5 +155,25 @@
 
 .share__button {
     margin-bottom: 30rpx;
-    width: 200rpx;
+    width: 240rpx;
+}
+
+.share__canvas6-image {
+    width: 216rpx;
+    height: 116rpx;
+    margin: 0 5rpx;
+}
+
+.share__canvas6-image-2 {
+    width: 240rpx;
+    height: 216rpx;
+    margin: 20rpx 5rpx 0;
+}
+
+.share__canvas6 {
+    height: 900rpx;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    flex-wrap: wrap;
 }
