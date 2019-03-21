@@ -5,6 +5,7 @@
     align-items: center;
     box-sizing: border-box;
     padding-top: 40rpx;
+    overflow: hidden;
 }
 
 .share__canvas {
