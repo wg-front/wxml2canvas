@@ -1,3 +1,10 @@
+## v1.2.0
+
+支持base64图片的转换和绘制，基于sdk1.9.9+，将图片存储到本地再绘制。
+使用时src或background-image传入base64编码的值，然后声明`data-base64="1"`。下图绿框部分为base64图片：
+
+![base64图片](https://mmocgame.qpic.cn/wechatgame/duc2TvpEgSSC0vZndxlmTVUYjVzXDV2G25rkpWlH63BOWc5iaUHI39GBcsd4pjjiaJ/0)
+
 ## v1.1.0
 
 支持图片的缩放和裁剪，使用时声明如：`data-mode="aspectFill"`，mode的13种模式完全支持。效果如下：

@@ -188,6 +188,7 @@ class Wxml2Canvas {
 
         list.forEach((item, i) => {
             if (item.url && self._findPicIndex(item.url) === -1) {
+                
                 // 避免重复下载同一图片
                 self.allPic.push({
                     url: item.url,
@@ -195,23 +196,43 @@ class Wxml2Canvas {
                 });
                 all[count++] = new Promise((resolve, reject) => {
                     // 非http(s)域名的就不下载了
-                    if (!/^http/.test(item.url) || /^http:\/\/tmp\//.test(item.url) || /^http:\/\/127\.0\.0\.1/.test(item.url)) {
-                        wx.getImageInfo({
-                            src: item.url,
-                            success (res) {
-                                let index = self._findPicIndex(item.url);
-                                if(index > -1) {
-                                    self.allPic[index].local = item.url;
-                                    self.allPic[index].width = res.width;
-                                    self.allPic[index].height = res.height;
+                    if (!/^http/.test(item.url) || /^http:\/\/(tmp)|(usr)\//.test(item.url) || /^http:\/\/127\.0\.0\.1/.test(item.url)) {
+                        if(item.isBase64) {
+                            let fileManager = wx.getFileSystemManager();
+
+                            fileManager.writeFile({
+                                filePath: item.url,
+                                data: item.isBase64.replace(/data:image\/(.*);base64,/, ''),
+                                encoding: 'base64',
+                                success (res) {
+                                    imageInfo(item.url);
+                                },
+                                fail (res) {
+                                    reject(res);
+                                },
+                            })
+                            
+                        }else {
+                            imageInfo(item.url);
+                        }
+
+                        function imageInfo (url) {
+                            wx.getImageInfo({
+                                src: url,
+                                success (res) {
+                                    let index = self._findPicIndex(url);
+                                    if(index > -1) {
+                                        self.allPic[index].local = url;
+                                        self.allPic[index].width = res.width;
+                                        self.allPic[index].height = res.height;
+                                    }
+                                    resolve({ tempFilePath: url });
+                                }, 
+                                fail (res) {
+                                    reject(res);
                                 }
-                                resolve({ tempFilePath: item.url });
-                            }, 
-                            fail () {
-                                reject();
-                            }
-                        })
-                        
+                            })
+                        }
                     } else {
                         wx.downloadFile({
                             url: item.url.replace(/^https?/, 'https'),
@@ -227,8 +248,8 @@ class Wxml2Canvas {
                                         }
                                         resolve(res);
                                     },
-                                    fail () {
-                                        reject();
+                                    fail (res) {
+                                        reject(res);
                                     }
                                 })
                             },
@@ -969,7 +990,6 @@ class Wxml2Canvas {
     }
 
     _drawWxmlImage (sub, resolve, reject) {
-        
         let imageData = {
             url: sub.dataset.url,
             x: sub.left,
@@ -995,7 +1015,7 @@ class Wxml2Canvas {
     }
 
     _drawWxmlBackgroundImage (sub, resolve, reject) {
-        let url = sub.backgroundImage.replace(/url\((\"|\')?/, '').replace(/(\"|\')?\)$/, '');
+        let url = sub.dataset.url;
         let index = this._findPicIndex(url);
         url = index > -1 ? this.allPic[index].local : url;
         let size = sub.backgroundSize.replace(/px/g, '').split(' ');
@@ -1033,7 +1053,10 @@ class Wxml2Canvas {
                     ]
             }, (res) => {
                 if(count++ === 0) {
-                    let list = self._formatImage(res);
+                    let formated = self._formatImage(res);
+                    let list = formated.list;
+                    res = formated.res;
+
                     self._preloadImage(list).then(result => {
                         resolve(res);
                     }).catch((res) => {
@@ -1080,19 +1103,28 @@ class Wxml2Canvas {
         let list = [];
         res.forEach((item, index) => {
             let dataset = item.dataset;
+            let uid = Util.getUid();
+            let filename = `${wx.env.USER_DATA_PATH}/${uid}.png`;
             if(dataset.type === 'image' && dataset.url) {
-                list.push({
-                    url: dataset.url
-                })
+                let sub = {
+                    url: dataset.base64 ? filename : dataset.url,
+                    isBase64: dataset.base64 ? dataset.url : false
+                }
+
+                res[index].dataset = Object.assign(res[index].dataset, sub);
+                list.push(sub)
             } else if (dataset.type === 'background-image' && item.backgroundImage.indexOf('url') > -1) {
                 let url = item.backgroundImage.replace(/url\((\"|\')?/, '').replace(/(\"|\')?\)$/, '');
-                list.push({
-                    url: url
-                })
+                let sub = {
+                    url: dataset.base64 ? filename : url,
+                    isBase64: dataset.base64 ? url : false
+                }
+                res[index].dataset = Object.assign(res[index].dataset, sub);
+                list.push(sub)
             }
         });
 
-        return list;
+        return { list, res };
     }
 
     _updateProgress (distance) {
