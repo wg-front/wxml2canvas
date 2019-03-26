@@ -16,8 +16,9 @@ class Wxml2Canvas {
         this.object = options.obj;
         this.width = options.width * this.zoom || 0;
         this.height = options.height * this.zoom || 0;
-        this.destWidth = options.destWidth || this.width * 2;
-        this.destHeight = options.destHeight || this.height * 2;
+        this.destZoom = options.destZoom || 3;
+        this.destWidth = this.width * this.destZoom;
+        this.destHeight = this.height * this.destZoom;
         this.translateX = options.translateX * this.zoom || 0;
         this.translateY = options.translateY * this.zoom || 0;
         this.gradientBackground = options.gradientBackground || null;
@@ -159,13 +160,11 @@ class Wxml2Canvas {
         setTimeout(() => {
             self.progress(95);
 
-            wx.canvasToTempFilePath({
+            let obj = {
                 x: 0,
                 y: 0,
                 width: self.width,
                 height: self.height,
-                destWidth: self.destWidth,
-                destHeight: self.destHeight,
                 canvasId: self.element,
                 success: function (res) {
 
@@ -177,7 +176,14 @@ class Wxml2Canvas {
 
                     self.errorHandler({errcode: 1000, errmsg: 'save canvas error', e: res});
                 }
-            }, self.object);
+            }
+
+            if(self.destZoom !== 3) {
+                obj.destWidth = self.destWidth;
+                obj.destHeight = self.destHeight;
+            }
+
+            wx.canvasToTempFilePath(obj, self.object);
         }, self.device.system.indexOf('iOS') === -1 ? 300 : 100);
     }
 
