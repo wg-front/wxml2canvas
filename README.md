@@ -1,3 +1,9 @@
+## v1.3.0
+
+优化图片清晰度控制。
+
+`new Wxml2Canvas`时增加`destZoom`属性，默认3，(建议取值范围2-5)，取消`destWidth`，`destHeight`属性的作用。destZoom值越大，图片越大，建议不传，使用小程序默认值
+
 ## v1.2.0
 
 支持base64图片的转换和绘制，基于sdk1.9.9+，将图片存储到本地再绘制。
@@ -94,8 +100,7 @@ Page({
 | element | String | '' | 是 | 画布的id |
 | width | Number | 0 | 是 | 画布的宽，以iphone6的375为基准，其他机型按比例自动设置实际宽度 |
 | height | Number | 0 | 是 | 画布的高，同上 |
-| width | Number | width * 2 | 否 | 输出的图片的宽度 |
-| height | Number | height * 2 | 否 | 输出的图片的高度 |
+| destZoom | Number | 3 | 否 | 输出的图片的像素密度，不建议传值，如果需要控制图片大小，可以适当减小 |
 | zoom | Number | 1 | 否 | 画布整体缩放比例，不建议传值，会覆盖各种机型的适配 |
 | translateX | Number | 0 | 否 | 画布整体横向位移 |
 | translateY | Number | 0 | 否 | 画布整体纵向位移 |
