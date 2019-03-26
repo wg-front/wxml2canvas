@@ -2,7 +2,7 @@
 
 优化图片清晰度控制。
 
-`new Wxml2Canvas`时增加`destZoom`属性，默认3，(建议取值范围2-5)，取消`destWidth`，`destHeight`属性的作用。destZoom值越大，图片越大，建议不传，使用小程序默认值
+`new Wxml2Canvas`时增加`destZoom`属性，默认3，(建议取值范围2-5)，取消`destWidth`，`destHeight`属性的作用。destZoom值越大，图片越大，建议不传，使用小程序默认值。
 
 ## v1.2.0
 
