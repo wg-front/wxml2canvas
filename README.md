@@ -34,7 +34,7 @@
 安装：
 
 ```
-    npm install git+https://github.com/wg-front/wxml2canvas.git
+    npm install wxml2canvas
 ```
 
 wxml:
