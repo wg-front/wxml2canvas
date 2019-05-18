@@ -650,7 +650,12 @@ class Wxml2Canvas {
 
             let url;
             if(isImage) {
+              let index = this._findPicIndex(item.url);
+              if (index > -1) {
+                url = this.allPic[index].local;
+              } else {
                 url = item.url;
+              }
             }
 
             if(!isWxml) {
@@ -1111,7 +1116,7 @@ class Wxml2Canvas {
             let dataset = item.dataset;
             let uid = Util.getUid();
             let filename = `${wx.env.USER_DATA_PATH}/${uid}.png`;
-            if(dataset.type === 'image' && dataset.url) {
+            if ((dataset.type === "image" || dataset.type === "radius-image") && dataset.url) {
                 let sub = {
                     url: dataset.base64 ? filename : dataset.url,
                     isBase64: dataset.base64 ? dataset.url : false
