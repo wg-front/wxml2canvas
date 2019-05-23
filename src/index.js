@@ -5,13 +5,13 @@ const imageMode = ['scaleToFill', 'aspectFit', 'aspectFill', 'widthFix', 'top', 
 class Wxml2Canvas {
     constructor (options = {}) {
         this.device = wx.getSystemInfoSync && wx.getSystemInfoSync() || {};
-        
+
         if (!options.zoom) {
             this.zoom = this.device.windowWidth / 375;
         } else {
             this.zoom = options.zoom || 1;
-        }   
-        
+        }
+
         this.element = options.element;
         this.object = options.obj;
         this.width = options.width * this.zoom || 0;
@@ -60,7 +60,7 @@ class Wxml2Canvas {
         this.data = null;
         this.ref = null;
         this.allPic = [];
-        this.screenList = []; 
+        this.screenList = [];
         this.asyncList = [];
         this.imgUrl = '';
         this.progressPercent = 0;
@@ -154,7 +154,7 @@ class Wxml2Canvas {
     }
 
     _saveCanvasToImage () {
-        let self = this;       
+        let self = this;
 
         // 延时保存有两个原因，一个是等待绘制delay的元素，另一个是安卓上样式会错乱
         setTimeout(() => {
@@ -194,7 +194,7 @@ class Wxml2Canvas {
 
         list.forEach((item, i) => {
             if (item.url && self._findPicIndex(item.url) === -1) {
-                
+
                 // 避免重复下载同一图片
                 self.allPic.push({
                     url: item.url,
@@ -217,7 +217,7 @@ class Wxml2Canvas {
                                     reject(res);
                                 },
                             })
-                            
+
                         }else {
                             imageInfo(item.url);
                         }
@@ -233,7 +233,7 @@ class Wxml2Canvas {
                                         self.allPic[index].height = res.height;
                                     }
                                     resolve({ tempFilePath: url });
-                                }, 
+                                },
                                 fail (res) {
                                     reject(res);
                                 }
@@ -264,7 +264,7 @@ class Wxml2Canvas {
                             }
                         })
                     }
-                }) 
+                })
             }
         });
 
@@ -293,7 +293,7 @@ class Wxml2Canvas {
         try {
             item.x = this._resetPositionX(item, style);
             item.y = this._resetPositionY(item, style);
-            
+
             let url;
             if(isImage) {
                 let index = this._findPicIndex(item.url);
@@ -353,7 +353,7 @@ class Wxml2Canvas {
                 this.ctx.fillRect(x, y, width, height);
             }
         });
-        
+
         if(url) {
             // 开发者工具有bug，先不裁剪
             if(mode) {
@@ -384,16 +384,16 @@ class Wxml2Canvas {
         let imgHeight = mode.height;
 
         switch (mode.type) {
-            case 'scaleToFill': 
+            case 'scaleToFill':
                 imgWidth = width;
                 imgHeight = height;
                 self.ctx.drawImage(url, x, y, width, height)
                 break;
-            case 'widthFix': 
+            case 'widthFix':
                 height = width / ((imgWidth || 1) / (imgHeight || 1))
                 self.ctx.drawImage(url, x, y, width, height)
-                break; 
-            case 'aspectFit': 
+                break;
+            case 'aspectFit':
                 if(imgWidth > imgHeight) {
                     let realHeight = width / ((imgWidth || 1) / (imgHeight || 1))
                     offsetY = -(height - realHeight) / 2
@@ -408,7 +408,7 @@ class Wxml2Canvas {
 
                 _clip();
                 break;
-            case 'aspectFill': 
+            case 'aspectFill':
                 if(imgWidth > imgHeight) {
                     let realWidth = imgWidth / ((imgHeight || 1) / (height || 1))
                     offsetX = (realWidth - width) / 2
@@ -423,49 +423,49 @@ class Wxml2Canvas {
 
                 _clip();
                 break;
-            case 'top left': 
+            case 'top left':
                 _clip();
                 break;
-            case 'top': 
+            case 'top':
                 offsetX = (mode.width - width) / 2;
                 _clip();
                 break;
-            case 'top right': 
+            case 'top right':
                 offsetX = (mode.width - width);
                 _clip();
                 break;
-            case 'left': 
+            case 'left':
                 offsetY = (mode.height - height) / 2;
                 _clip();
                 break;
-            case 'center': 
+            case 'center':
                 offsetX = (mode.width - width) / 2;
                 offsetY = (mode.height - height) / 2;
                 _clip();
                 break;
-            case 'right': 
+            case 'right':
                 offsetX = (mode.width - width);
                 offsetY = (mode.height - height) / 2;
                 _clip();
                 break;
-            case 'bottom left': 
+            case 'bottom left':
                 offsetY = (mode.height - height)
                 _clip();
                 break;
-            case 'bottom': 
+            case 'bottom':
                 offsetX = (mode.width - width) / 2;
                 offsetY = (mode.height - height)
                 _clip();
                 break;
-            case 'bottom right': 
+            case 'bottom right':
                 offsetX = (mode.width - width);
                 offsetY = (mode.height - height)
                 _clip();
                 break;
-            default: 
+            default:
                 imgWidth = width;
                 imgHeight = height;
-                break;  
+                break;
         }
 
         function _clip () {
@@ -498,7 +498,7 @@ class Wxml2Canvas {
             let width = Math.ceil((style.width || textWidth) * (!isWxml ? zoom : 1));
             let whiteSpace = style.whiteSpace || 'wrap';
             let x = 0;
-            let y = 0;                
+            let y = 0;
 
             if(typeof style.padding === 'string') {
                 style.padding = Util.transferPadding(style.padding);
@@ -510,7 +510,7 @@ class Wxml2Canvas {
             if(style.background || style.border) {
                 this._drawTextBackgroud(item, style, textWidth, textHeight, isWxml);
             }
-            
+
             // 行内文本
             if(type === 'inline-text') {
                 width = item.maxWidth;
@@ -605,9 +605,9 @@ class Wxml2Canvas {
                     this.ctx.fillText(item.text, x, y);
                 }
             }
-            
+
             this.ctx.draw(true);
-            
+
             this._updateProgress(item.progress);
 
             if(resolve) {
@@ -644,13 +644,18 @@ class Wxml2Canvas {
         let zoom = this.zoom;
         let r = style.r;
         try {
-            
+
             item.x = this._resetPositionX(item, style);
             item.y = this._resetPositionY(item, style);
 
             let url;
             if(isImage) {
-                url = item.url;
+                let index = this._findPicIndex(item.url);
+                if(index > -1) {
+                    url = this.allPic[index].local
+                }else {
+                    url = item.url;
+                }
             }
 
             if(!isWxml) {
@@ -658,7 +663,7 @@ class Wxml2Canvas {
             }
 
             this._drawCircleToCanvas(item.x, item.y, r, style, url);
-            
+
             this._updateProgress(item.progress);
             resolve && resolve();
         } catch (e) {
@@ -754,7 +759,7 @@ class Wxml2Canvas {
     _drawImage (item, style, resolve, reject, isWxml) {
         let zoom = this.zoom;
         try {
-            
+
             item.x = this._resetPositionX(item, style);
             item.y = this._resetPositionY(item, style);
             item.x = item.x + (style.padding[3] || 0);
@@ -792,7 +797,7 @@ class Wxml2Canvas {
         let all = [];
         try {
             this._getWxml(item, style).then((results) => {
-                
+
                 // 上 -> 下
                 let sorted = self._sortListByTop(results[0]);
                 let count = 0;
@@ -916,7 +921,7 @@ class Wxml2Canvas {
 
                 lastTop = +top;
                 topOffset = 0;
-                
+
                 inlineList.forEach((sub, index) => {
                     sub = self._transferWxmlStyle(sub, item, limitLeft, limitTop);
                     sub.progress = progress;
@@ -935,7 +940,7 @@ class Wxml2Canvas {
             resolve2();
         })
 
-        all.push(p); 
+        all.push(p);
         return all;
     }
 
@@ -944,7 +949,7 @@ class Wxml2Canvas {
         if(sub.dataset.maxlength && text.length > sub.dataset.maxlength) {
             text = text.substring(0, sub.dataset.maxlength) + '...';
         }
-        
+
         let textData = {
             text,
             originX: sub.left,
@@ -975,7 +980,7 @@ class Wxml2Canvas {
         if(sub.dataset.maxlength && text.length > sub.dataset.maxlength) {
             text = text.substring(0, sub.dataset.maxlength) + '...';
         }
-        
+
         let textData = {
             text,
             x: sub.left,
@@ -1052,7 +1057,7 @@ class Wxml2Canvas {
                 dataset: true,
                 size: true,
                 rect: true,
-                computedStyle: ['width', 'height', 'font', 'fontSize', 'fontFamily', 'fontWeight', 'fontStyle', 'textAlign', 
+                computedStyle: ['width', 'height', 'font', 'fontSize', 'fontFamily', 'fontWeight', 'fontStyle', 'textAlign',
                     'color', 'lineHeight', 'border', 'borderColor', 'borderStyle', 'borderWidth',  'verticalAlign', 'boxShadow',
                     'background', 'backgroundColor', 'backgroundImage', 'backgroundPosition', 'backgroundSize', 'paddingLeft', 'paddingTop',
                     'paddingRight', 'paddingBottom'
@@ -1111,7 +1116,7 @@ class Wxml2Canvas {
             let dataset = item.dataset;
             let uid = Util.getUid();
             let filename = `${wx.env.USER_DATA_PATH}/${uid}.png`;
-            if(dataset.type === 'image' && dataset.url) {
+            if((dataset.type === 'image' || dataset.type === 'radius-image') && dataset.url) {
                 let sub = {
                     url: dataset.base64 ? filename : dataset.url,
                     isBase64: dataset.base64 ? dataset.url : false
@@ -1185,14 +1190,14 @@ class Wxml2Canvas {
         let paddingBottom = Number(sub.paddingBottom.replace('px', '')) + Number(padding[2]);
         let paddingLeft = Number(sub.paddingLeft.replace('px', '')) + Number(padding[3]);
         sub.padding = [paddingTop, paddingRight, paddingBottom, paddingLeft];
-        
+
         return sub;
     }
 
     /**
      * 支持负值绘制，从右边计算
-     * @param {*} item 
-     * @param {*} style 
+     * @param {*} item
+     * @param {*} style
      */
     _resetPositionX (item, style) {
         let zoom = this.zoom;
@@ -1209,13 +1214,17 @@ class Wxml2Canvas {
             x = item.x * zoom;
         }
 
+        if (parseInt(style.borderWidth)) {
+            x += parseInt(style.borderWidth)
+        }
+
         return x + this.translateX;
     }
 
     /**
      * 支持负值绘制，从底部计算
-     * @param {*} item 
-     * @param {*} style 
+     * @param {*} item
+     * @param {*} style
      */
     _resetPositionY (item, style, textHeight) {
         let zoom = this.zoom;
@@ -1231,13 +1240,17 @@ class Wxml2Canvas {
             y = item.y * zoom;
         }
 
+        if (parseInt(style.borderWidth)) {
+            y += parseInt(style.borderWidth)
+        }
+
         return y + this.translateY;
     }
 
     /**
      * 文字的padding、text-align
-     * @param {*} item 
-     * @param {*} style 
+     * @param {*} item
+     * @param {*} style
      * @param {*} textWidth
      */
     _resetTextPositionX (item, style, textWidth, width) {
@@ -1256,8 +1269,8 @@ class Wxml2Canvas {
 
     /**
      * 文字的padding、text-align
-     * @param {*} item 
-     * @param {*} style 
+     * @param {*} item
+     * @param {*} style
      * @param {*} textWidth
      */
     _resetTextPositionY (item, style, lineNum = 0) {
@@ -1279,10 +1292,10 @@ class Wxml2Canvas {
 
     /**
      * 当文本超过宽度时，计算每一行应该绘制的文本
-     * @param {*} text 
-     * @param {*} width 
-     * @param {*} singleLength 
-     * @param {*} currentIndex 
+     * @param {*} text
+     * @param {*} width
+     * @param {*} singleLength
+     * @param {*} currentIndex
      * @param {*} widthOffset
      */
     _getTextSingleLine(text, width, singleLength, currentIndex = 0, widthOffset = 0) {
@@ -1299,8 +1312,8 @@ class Wxml2Canvas {
         }
 
         return {
-            endIndex, 
-            single, 
+            endIndex,
+            single,
             singleWidth
         }
     }
@@ -1316,7 +1329,7 @@ class Wxml2Canvas {
             // 空白阴影，清空掉边框的阴影
             this._drawBoxShadow();
             if (border) {
-                
+
                 this.ctx.setLineWidth(border.width * zoom);
 
                 if (border.style === 'dashed') {
@@ -1329,7 +1342,7 @@ class Wxml2Canvas {
             }
             callback && callback(border);
         }
-    }  
+    }
 
     _drawBoxShadow (boxShadow, callback) {
         boxShadow = Util.transferBoxShadow(boxShadow);
