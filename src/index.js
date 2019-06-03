@@ -1214,6 +1214,10 @@ class Wxml2Canvas {
             x = item.x * zoom;
         }
 
+        if (parseInt(style.borderWidth)) {
+            x += parseInt(style.borderWidth)
+        }
+
         return x + this.translateX;
     }
 
@@ -1236,6 +1240,10 @@ class Wxml2Canvas {
             y = item.y * zoom;
         }
 
+        if (parseInt(style.borderWidth)) {
+            y += parseInt(style.borderWidth)
+        }
+        
         return y + this.translateY;
     }
 
