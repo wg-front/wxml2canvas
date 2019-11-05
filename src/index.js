@@ -13,7 +13,7 @@ class Wxml2Canvas {
         }   
         
         this.element = options.element;
-        this.object = options.obj;
+        this.obj = options.obj;
         this.width = options.width * this.zoom || 0;
         this.height = options.height * this.zoom || 0;
         this.destZoom = options.destZoom || 3;
@@ -67,7 +67,7 @@ class Wxml2Canvas {
         this.distance = 0;
         this.progress(0);
 
-        this.ctx = wx.createCanvasContext(this.element, this.object);
+        this.ctx = wx.createCanvasContext(this.element, this.obj);
         this.ctx.font = this.font;
         this.ctx.setTextBaseline('top');
         this.ctx.setStrokeStyle('white');
@@ -1044,8 +1044,8 @@ class Wxml2Canvas {
     _getWxml (item, style) {
         let self = this;
         let query;
-        if(this.object) {
-            query = wx.createSelectorQuery().in(this.object);
+        if(this.obj) {
+            query = wx.createSelectorQuery().in(this.obj);
         }else {
             query = wx.createSelectorQuery();
         }
