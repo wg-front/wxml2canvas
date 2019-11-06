@@ -183,7 +183,7 @@ class Wxml2Canvas {
                 obj.destHeight = self.destHeight;
             }
 
-            wx.canvasToTempFilePath(obj, self.object);
+            wx.canvasToTempFilePath(obj, self.obj);
         }, self.device.system.indexOf('iOS') === -1 ? 300 : 100);
     }
 
