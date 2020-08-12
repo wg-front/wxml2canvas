@@ -13,7 +13,7 @@ class Wxml2Canvas {
         }   
         
         this.element = options.element;
-        this.object = options.obj;
+        this.obj = options.obj;
         this.width = options.width * this.zoom || 0;
         this.height = options.height * this.zoom || 0;
         this.destZoom = options.destZoom || 3;
@@ -183,7 +183,7 @@ class Wxml2Canvas {
                 obj.destHeight = self.destHeight;
             }
 
-            wx.canvasToTempFilePath(obj, self.object);
+            wx.canvasToTempFilePath(obj, self.obj);
         }, self.device.system.indexOf('iOS') === -1 ? 300 : 100);
     }
 
